@@ -115,7 +115,7 @@ export default function Home() {
                 href={'/pricing'}
                 className="text-blue-700 underline-offset-2"
                 >
-                  plan pro                
+                  plan premium               
                 </Link>
               </span>
             </div>
@@ -162,6 +162,7 @@ export default function Home() {
               </div>
             </div>
       </div>
+      
     </>
   );
 }
