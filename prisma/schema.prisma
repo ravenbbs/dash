@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// prisma/schema.prisma
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  relationMode = "prisma"
+  directUrl = env("DIRECT_URL")
+}
+
+// Modelo de usuario
+model User {
+  // Clave primaria única que identifica a cada usuario.
+  id String @id @unique
+
+  // Almacena la dirección de correo electrónico del usuario.
+  // Debe ser única para cada usuario.
+  email String @unique
+
+  // **Campos relacionados con Stripe:**
+
+  // Almacena el ID de cliente de Stripe, utilizado para el procesamiento de pagos.
+  // Opcional para usuarios sin cuenta Stripe.
+  // Debe ser único para evitar duplicados.
+  stripeCustomerId String? @unique @map(name: "stripe_customer_id")
+
+  // Almacena el ID de suscripción de Stripe, si corresponde.
+  // Opcional, único y mapeado a una columna de la base de datos.
+  stripeSubscriptionId String? @unique @map(name: "stripe_subscription_id")
+
+  // Almacena el ID de precio de Stripe para el plan de suscripción del usuario.
+  // Opcional y mapeado a una columna de la base de datos.
+  stripePriceId String? @map(name: "stripe_priceid")
+
+  // Almacena la fecha y hora de finalización del período de suscripción actual.
+  // Opcional, único y mapeado a una columna de la base de datos.
+  stripeCurrentPeriodEnd DateTime? @unique @map(name: "stripe_current_period_end")
+}
+
+// Explicación de las anotaciones:
+
+// @id: Indica que este campo es la clave primaria del modelo.
+// @unique: Indica que este campo debe ser único para cada fila.
+// @map(name: "nombre_columna"): Mapea el nombre del campo en el modelo a un nombre de columna específico en la base de datos.
