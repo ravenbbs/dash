@@ -28,7 +28,7 @@ const Dashboard = () => {
   });
 
   return (
-    <main className="mx-auto max-w-7xl md:p-10">
+    <main className="mx-auto max-w-7xl md:p-10 px-4 pb-12">
       <div className="mt-8 flex flex-col items-start justify-between gap-4 border-b border-gray-200 pb-5 sm:flex-row sm:items-center sm:gap-0">
         <h1 className="mb-3 font-bold text-5xl text-gray-900">Mis archivos</h1>
         <UploadButton />
@@ -89,7 +89,11 @@ const Dashboard = () => {
             ))}
         </ul>
       ) : isLoading ? (
-        <Skeleton height={100} className="my-2" count={4} />
+        <Skeleton
+          height={100}
+          className="my-6 inline-block col-span-1 "
+          count={4}
+        />
       ) : (
         <div className=" mt-16 flex flex-col items-center gap-2">
           <Ghost className="h-8 w-8 text-zinc-800" />
