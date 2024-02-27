@@ -29,15 +29,12 @@ const Page = async ({ params }: PageProps)  => {
   })
   const fileUri = file?.url
 
-
-
-
   return (
     <div className="flex-1 justify-between flex flex-col h-[calc(100vh-3.5rem)]">
       <div className="mx-auto w-full max-w-7xl grow lg:flex xl:px-2">
         {/* left side */}
         <div className="flex-1 xl:flex">
-          <div className="px-4 py-6 sm:px-6 lg:pl-8 xl:flex-1 xl:pl-6">
+          <div className="px-4 py-6 sm:px-6 lg:px-8 xl:flex-1 xl:px-6">
             <PdfRenderer url={fileUri} />
           </div>
         </div>
