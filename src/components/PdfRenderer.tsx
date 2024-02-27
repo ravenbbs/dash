@@ -1,5 +1,11 @@
 "use client";
-import { ChevronDown, ChevronUp, Loader2, Search } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  Loader2,
+  RotateCw,
+  Search,
+} from "lucide-react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -21,6 +27,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import PdfFullscreen from "./PdfFullscreen";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -34,6 +41,10 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
   const [numPages, setNumPages] = useState<number>();
   const [currPage, setCurrPage] = useState<number>(1);
   const [scale, setScale] = useState<number>(1);
+  const [rotation, setRotation] = useState<number>(0);
+
+  const [renderScale, setRenderScale] = useState<number | null>(null);
+  const isLoading = renderScale !== scale;
 
   const CustomPageValidator = z.object({
     page: z
@@ -70,6 +81,7 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
             disabled={currPage <= 1}
             onClick={() => {
               setCurrPage((prev) => (prev - 1 > 1 ? prev - 1 : 1));
+              setValue("page", String(currPage - 1));
             }}
             variant={"ghost"}
             aria-label="previous page"
@@ -102,6 +114,7 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
               setCurrPage((prev) =>
                 prev + 1 > numPages! ? numPages! : prev + 1
               );
+              setValue("page", String(currPage + 1));
             }}
             variant={"ghost"}
             aria-label="next page"
@@ -111,8 +124,8 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
         </div>
         <div className="space-x-2">
           <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button className="gap-1.5" aria-label="zoom" variant={"ghost"}>
+            <DropdownMenuTrigger asChild>
+              <Button  className="gap-1.5" aria-label="zoom" variant={"ghost"}>
                 <Search className="h-4 w-4" />
                 {scale * 100}% <ChevronDown className="h-4 w-4 opacity-50" />
               </Button>
@@ -132,6 +145,17 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <Button
+            onClick={() => {
+              setRotation((prev) => prev + 90);
+            }}
+            variant={"ghost"}
+            aria-label="rotate 90 degrees"
+          >
+            <RotateCw className="h-4 w-4" />
+          </Button>
+          <PdfFullscreen fileUrl={url} />
         </div>
       </div>
       <div className="flex-1 w-full max-h-screen">
@@ -154,10 +178,33 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
               file={url}
               className={"max-h-full"}
             >
+              {isLoading && renderScale ? (
+                <Page
+                  width={width ? width : 1}
+                  pageNumber={currPage}
+                  scale={scale}
+                  rotate={rotation}
+                  key={"@" + renderScale}
+                  loading={
+                    <div className="flex justify-center">
+                      <Loader2 className="animate-spin my-24 h-6 w-6" />
+                    </div>
+                  }
+                />
+              ) : null}
+
               <Page
                 width={width ? width : 1}
                 pageNumber={currPage}
                 scale={scale}
+                rotate={rotation}
+                key={"@" + scale}
+                loading={
+                  <div className="flex justify-center">
+                    <Loader2 className="animate-spin my-24 h-6 w-6" />
+                  </div>
+                }
+                onRenderSuccess={() => setRenderScale(scale)}
               />
             </Document>
           </div>
