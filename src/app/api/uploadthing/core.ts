@@ -4,9 +4,9 @@ import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { PineconeStore } from "@langchain/pinecone";
-import { getPineconeClient } from "@/lib/pinecone";
-import { Pinecone } from "@pinecone-database/pinecone";
+import { pinecone } from "@/lib/pinecone";
 
+import OpenAI from 'openai';
 const f = createUploadthing();
 
 export const ourFileRouter = {
@@ -35,15 +35,16 @@ export const ourFileRouter = {
         const blob = await response.blob();
         const loader = new PDFLoader(blob);
         const pageLevelDocs = await loader.load();
-        const pagesAmt = pageLevelDocs.length;
+        const pagesAnt = pageLevelDocs.length;
 
-        const pc = new Pinecone({
-          apiKey: process.env.PINECONE_API_KEY!
-        });
-        const pineconeIndex = pc.index('quickstart');
+        // Vectorize and index entire doc
+				console.log('Creating Pinecone');
+				// Init OpenAI
+				const openai = new OpenAI({
+					apiKey: process.env.OPENAI_API_KEY,
+				});
 
-        //const client = await getPineconeClient();
-        //const pineconeIndex = await client.index("dash");
+        const pineconeIndex = pinecone.index('dash');
 
         const embeddings = new OpenAIEmbeddings({
           openAIApiKey: process.env.OPENAI_API_KEY,
