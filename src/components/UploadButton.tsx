@@ -42,7 +42,8 @@ const UploadDropzone = () => {
   };
 
   return (
-    <Dropzone
+    <Dropzone 
+      preventDropOnDocument
       multiple={false}
       onDrop={async (acceptedFile) => {
         setIsUploading(true);
@@ -76,6 +77,7 @@ const UploadDropzone = () => {
 
         startPolling({key})
       }}
+      
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => (
         <div
@@ -123,12 +125,15 @@ const UploadDropzone = () => {
                   ) : null}
                 </div>
               ) : null}
-              
-              <input 
-              {...getInputProps}
-              type="file"
+
+              <input
+              //onClick={() => getInputProps()}
+              {...getInputProps()}
               id="dropzone-file"
               className="hidden"
+              type="file"
+              accept="application/pdf"
+              aria-label="input dropzone"
               />
             </label>
           </div>
