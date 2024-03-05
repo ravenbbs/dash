@@ -14,7 +14,7 @@ const Messages = ({ fileId}: MessagesProps) => {
     getNextPageParam: (lastPage) => lastPage?.nextCursor,
     keepPreviousData: true
   })
-
+  
   const messages = data?.pages.flatMap((page) => page.messages)
 
   const loadingMessage = {

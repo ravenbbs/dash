@@ -26,7 +26,7 @@ const ChatInput = ({ isDisabled }: ChatInputProps) => {
               ref={textareaRef}
               autoFocus
               onChange={handleInputChange}
-              value={message}
+              value={message} 
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
