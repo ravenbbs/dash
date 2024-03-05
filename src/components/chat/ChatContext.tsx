@@ -46,13 +46,15 @@ export const ChatContextProvider = ({fileId, children}: Props) => {
     }
   })
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>)
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setMessage(e.target.value)
+  }
 
   const addMessage = () => sendMessage({ message })
 
   return (
 
-    <ChatContextProvider
+    <ChatContext.Provider
     value={{
       addMessage,
       message,
@@ -61,7 +63,7 @@ export const ChatContextProvider = ({fileId, children}: Props) => {
     }}
     >
       {children}
-    </ChatContextProvider>
+    </ChatContext.Provider>
 
   )
 
