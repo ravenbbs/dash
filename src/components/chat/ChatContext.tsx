@@ -2,70 +2,64 @@ import { ReactNode, createContext, useState } from "react";
 import { useToast } from "../ui/use-toast";
 import { useMutation } from "@tanstack/react-query";
 
-
 type StreamResponse = {
-  addMessage: () => void,
-  message: string,
-  handleInputChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void,
-  isLoading: false
-}
+  addMessage: () => void;
+  message: string;
+  handleInputChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  isLoading: false;
+};
 
-
-export const ChatContext = createContext({ 
+export const ChatContext = createContext({
   addMessage: () => {},
-  message: '',
+  message: "",
   handleInputChange: () => {},
-  isLoading: false
-})
+  isLoading: false,
+});
 
 interface Props {
-  fileId: string
-  children: ReactNode
+  fileId: string;
+  children: ReactNode;
 }
 
-export const ChatContextProvider = ({fileId, children}: Props) => {
-  const [message, setMessage] = useState<string>('')
-  const [loading, isLoading] = useState<boolean>(false)
-  const { toast } = useToast()
+export const ChatContextProvider = ({ fileId, children }: Props) => {
+  const [message, setMessage] = useState<string>("");
+  const [loading, isLoading] = useState<boolean>(false);
+  const { toast } = useToast();
 
-  const { mutate: sendMessage} = useMutation({
-    mutationFn: async ({message}: {message: string}) => {
-      const response = await fetch('/api/message', {
-        method:'POST',
+  const { mutate: sendMessage } = useMutation({
+    mutationFn: async ({ message }: { message: string }) => {
+      const response = await fetch("/api/message", {
+        method: "POST",
         body: JSON.stringify({
           fileId,
-          message
-        })
-      })
+          message,
+        }),
+      });
 
-      if(!response.ok) {
-        throw new Error("Failed to send message")
+      if (!response.ok) {
+        throw new Error("Failed to send message");
       }
 
-      return response.body
-    }
-  })
+      return response.body;
+    },
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(e.target.value)
-  }
+    setMessage(e.target.value);
+  };
 
-  const addMessage = () => sendMessage({ message })
+  const addMessage = () => sendMessage({ message });
 
   return (
-
     <ChatContext.Provider
-    value={{
-      addMessage,
-      message,
-      handleInputChange,
-      isLoading
-    }}
+      value={{
+        addMessage,
+        message,
+        handleInputChange,
+        isLoading,
+      }}
     >
       {children}
     </ChatContext.Provider>
-
-  )
-
-
-}
+  );
+};

@@ -25,6 +25,7 @@ const Message = ({ message, isNextMessageSamePerson }: MessageProps) => {
         )}
 
       </div>
+      
     </div>
   );
 };
