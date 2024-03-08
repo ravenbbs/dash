@@ -12,7 +12,7 @@ interface MessageProps {
 const Message = ({ message, isNextMessageSamePerson }: MessageProps) => {
   return (
     <div
-      className={cn("flex items-end", { "justify-end": message.isUserMessage })}
+      className={cn("flex gap-1 items-end", { "justify-end": message.isUserMessage })}
     >
       <div
         className={cn(
