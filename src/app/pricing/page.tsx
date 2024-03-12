@@ -1,4 +1,6 @@
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import UpgradeButton from "@/components/UpgradeButton";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
@@ -8,11 +10,12 @@ import {
 import { PLANS } from "@/config/stripe";
 import { cn } from "@/lib/utils";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { Check, HelpCircle, Minus } from "lucide-react";
+import { ArrowRight, Check, HelpCircle, Minus } from "lucide-react";
+import Link from "next/link";
 
-const Page = () => {
+const Page = async () => {
   const { getUser } = getKindeServerSession();
-  const user = getUser();
+  const user = await getUser();
 
   const pricingItems = [
     {
@@ -153,16 +156,43 @@ const Page = () => {
                           </div>
                         ) : (
                           <p
-                              className={cn("text-gray", {
-                                "text-gray-600": negative,
-                              })}
-                            >
-                              {text}
-                            </p>
+                            className={cn("text-gray", {
+                              "text-gray-600": negative,
+                            })}
+                          >
+                            {text}
+                          </p>
                         )}
                       </li>
                     ))}
                   </ul>
+                  <div className="border-t border-gray-200" />
+                  <div className="p-5">
+                    {plan === "Gratuito" ? (
+                      <Link
+                        href={user ? '/dashboard' : '/sign-in'}
+                        className={buttonVariants({
+                          className: "w-full",
+                          variant: 'secondary'
+                        })}
+                      >
+                        {user ? "Actualizar plan" : "Iniciar sesión"}
+                        <ArrowRight className="h-5 w-5 ml-1.5" />
+                      </Link>
+                    ) : user ? (
+                      <UpgradeButton/>
+                    ) : (
+                      <Link
+                        href={"/sign-in"}
+                        className={buttonVariants({
+                          className: "w-full",
+                        })}
+                      >
+                        {user ? "Actualizar plan" : "Iniciar sesión"}
+                        <ArrowRight className="h-5 w-5 ml-1.5" />
+                      </Link>
+                    )}
+                  </div>
                 </div>
               );
             })}
