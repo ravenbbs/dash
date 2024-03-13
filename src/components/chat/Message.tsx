@@ -14,7 +14,7 @@ const Message = forwardRef<HTMLDivElement, MessageProps>(
   ({ message, isNextMessageSamePerson }, ref) => {
     return (
       <div
-      ref={ref}
+        ref={ref}
         className={cn("flex gap-1 items-end", {
           "justify-end": message.isUserMessage,
         })}
@@ -79,6 +79,6 @@ const Message = forwardRef<HTMLDivElement, MessageProps>(
   }
 );
 
-Message.displayName = "Message"
+Message.displayName = "Message";
 
 export default Message;

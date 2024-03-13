@@ -1,9 +1,15 @@
-"use client"
+"use client";
 import { getUserSubscriptionPlan } from "@/lib/stripe";
 import { useToast } from "./ui/use-toast";
 import { trpc } from "@/app/_trpc/client";
 import MaxWidthWrapper from "./MaxWidthWrapper";
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
 import { format } from "date-fns";
@@ -50,19 +56,19 @@ const BillingForm = ({ subscriptionPlan }: BillingFormProps) => {
             <Button type="submit">
               {isLoading ? (
                 <Loader2 className="animate-spin h-6 w-6 mr-4" />
-              ): null}
-              {subscriptionPlan.isSubscribed ? 'Administrar suscripción' : "Actualizar a Premium"}
+              ) : null}
+              {subscriptionPlan.isSubscribed
+                ? "Administrar suscripción"
+                : "Actualizar a Premium"}
             </Button>
             {subscriptionPlan.isSubscribed ? (
               <p className="rounded-full text-xs font-medium">
-                {subscriptionPlan.isCanceled ? 
-                'Tu plan se cancelara el ' : 
-                'Tu plan se renovara el '}
+                {subscriptionPlan.isCanceled
+                  ? "Tu plan se cancelara el "
+                  : "Tu plan se renovara el "}
                 {format(subscriptionPlan.stripeCurrentPeriodEnd!, "dd.MM.yyyy")}
-
               </p>
             ) : null}
-            
           </CardFooter>
         </Card>
       </form>
@@ -70,4 +76,4 @@ const BillingForm = ({ subscriptionPlan }: BillingFormProps) => {
   );
 };
 
-export default BillingForm
+export default BillingForm;

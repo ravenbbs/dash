@@ -4,19 +4,15 @@ import { TRPCError } from "@trpc/server";
 import { db } from "@/db";
 import { z } from "zod";
 import { INFINITE_QUERY_LIMIT } from "@/config/infinite-query";
-import { absoluteUrl } from '@/lib/utils'
-import {
-  getUserSubscriptionPlan,
-  stripe,
-} from '@/lib/stripe'
-import { PLANS } from '@/config/stripe'
+import { absoluteUrl } from "@/lib/utils";
+import { getUserSubscriptionPlan, stripe } from "@/lib/stripe";
+import { PLANS } from "@/config/stripe";
 
 export const appRouter = router({
   authCallback: publicProcedure.query(async () => {
     const { getUser } = getKindeServerSession();
-    const user = await getUser();
+    const user = getUser();
 
-    if (!user) throw new TRPCError({ code: "UNAUTHORIZED" });
     if (!user?.id || !user.email) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
@@ -132,7 +128,8 @@ export const appRouter = router({
       billing_address_collection: "auto",
       line_items: [
         {
-          price: PLANS.find((plan) => plan.name === "Premium")?.price.priceIds.test,
+          price: PLANS.find((plan) => plan.name === "Premium")?.price.priceIds
+            .test,
           quantity: 1,
         },
       ],

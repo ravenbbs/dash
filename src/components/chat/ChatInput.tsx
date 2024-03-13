@@ -26,7 +26,7 @@ const ChatInput = ({ isDisabled }: ChatInputProps) => {
               ref={textareaRef}
               autoFocus
               onChange={handleInputChange}
-              value={message} 
+              value={message}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
@@ -43,8 +43,8 @@ const ChatInput = ({ isDisabled }: ChatInputProps) => {
               className="absolute bottom-1.5 right-[8px]"
               aria-label="send message"
               onClick={() => {
-                addMessage()
-                textareaRef.current?.focus()
+                addMessage();
+                textareaRef.current?.focus();
               }}
             >
               <Send className="h-4 w-4" />

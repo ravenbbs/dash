@@ -1,33 +1,31 @@
-import ChatWrapper from "@/components/chat/ChatWrapper"
-import PdfRenderer from "@/components/PdfRenderer"
-import { db } from "@/db"
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
-import { redirect } from "next/navigation"
+import ChatWrapper from "@/components/chat/ChatWrapper";
+import PdfRenderer from "@/components/PdfRenderer";
+import { db } from "@/db";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { redirect } from "next/navigation";
 
 interface PageProps {
   params: {
-    fileid: string
-  }
+    fileid: string;
+  };
 }
 
-const Page = async ({ params }: PageProps)  => {
+const Page = async ({ params }: PageProps) => {
+  const { fileid } = params;
 
-  const {fileid} = params
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
 
-
-  const {getUser} = getKindeServerSession()
-  const user = await getUser()
-
-  if(!user || !user.id) redirect(`/auth-callback?origin=dashboard/${fileid}`)
+  if (!user || !user.id) redirect(`/auth-callback?origin=dashboard/${fileid}`);
 
   // database call
   const file = await db.file.findFirst({
     where: {
       id: fileid,
-      userId: user.id
-    }
-  })
-  const fileUri = file?.url
+      userId: user.id,
+    },
+  });
+  const fileUri = file?.url;
 
   return (
     <div className="flex-1 justify-between flex flex-col h-[calc(100vh-3.5rem)]">
@@ -43,8 +41,7 @@ const Page = async ({ params }: PageProps)  => {
         </div>
       </div>
     </div>
-  )
+  );
+};
 
-}
-
-export default Page
+export default Page;
