@@ -99,7 +99,7 @@ const Page = async () => {
                 >
                   {plan === "Premium" && (
                     <div className="absolute -top-5 left-0 right-0 mx-auto w-32 rounded-full bg-gradient-to-tr from-blue-600 to-cyan-600 px-3 py-2 text-sm font-medium text-white">
-                      Actualizar plan
+                      Recomendado
                     </div>
                   )}
                   <div className="p-5">
@@ -180,7 +180,7 @@ const Page = async () => {
                         <ArrowRight className="h-5 w-5 ml-1.5" />
                       </Link>
                     ) : user ? (
-                      <UpgradeButton/>
+                      <UpgradeButton/> 
                     ) : (
                       <Link
                         href={"/sign-in"}
