@@ -17,7 +17,7 @@ export function absoluteUrl(path: string) {
 
 export function constructMetadata({
   title = "dash",
-  description = "Dash es un open-source software que permite chatear con tus PDFs fácilmente.",
+  description = "Dash es una aplicación que permite chatear con tus PDFs fácilmente.",
   image = "/thumbnail.png",
   icons = "/favicon.ico",
   noIndex = false
@@ -31,6 +31,7 @@ export function constructMetadata({
   return {
     title,
     description,
+    icons,
     openGraph: {
       title,
       description,
@@ -47,8 +48,7 @@ export function constructMetadata({
       images: [image],
       creator: "@ravenbbs"
     },
-    icons,
-    metadataBase: new URL('https://dash-proyect.vercel.app'),
+    metadataBase: new URL('https://dash-sass.vercel.app/'),
     themeColor: '#FFF',
     ...(noIndex && {
       robots: {
