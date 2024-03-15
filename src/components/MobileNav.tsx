@@ -1,10 +1,10 @@
 'use client'
 
+import {LogoutLink} from "@kinde-oss/kinde-auth-nextjs/components";
 import { ArrowRight, Menu } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { LogoutLink } from '@kinde-oss/kinde-auth-nextjs/server'
 
 const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
   const [isOpen, setOpen] = useState<boolean>(false)
@@ -54,7 +54,7 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
                     }
                     className='flex items-center w-full font-semibold'
                     href='/sign-in'>
-                    Sign in
+                    Iniciar Sesión
                   </Link>
                 </li>
                 <li className='my-3 h-px w-full bg-gray-300' />
@@ -65,7 +65,7 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
                     }
                     className='flex items-center w-full font-semibold'
                     href='/pricing'>
-                    Pricing
+                    Premium
                   </Link>
                 </li>
               </>
