@@ -15,6 +15,7 @@ const UploadDropzone = ({isSubscribed,}: {isSubscribed: boolean}) => {
   const router = useRouter()
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [bgColor, setBgColor] = useState<string>('')
   const {toast} = useToast()
 
   const { startUpload } = useUploadThing(isSubscribed ? 'premiumPlanUploader' : "freePlanUploader")
@@ -72,6 +73,8 @@ const UploadDropzone = ({isSubscribed,}: {isSubscribed: boolean}) => {
           })
         }
 
+
+        setBgColor(res ? 'bg-green-500':'bg-red-500') 
         clearInterval(progressInterval)
         setUploadProgress(100)
 
@@ -113,7 +116,7 @@ const UploadDropzone = ({isSubscribed,}: {isSubscribed: boolean}) => {
                 <div className="w-full mt-4 max-w-xs mx-auto">
                   <Progress 
                   indicatorColor={
-                    uploadProgress === 100 ? 'bg-green-500' : ''
+                    uploadProgress === 100 ? bgColor : ''
                   }
                   value={uploadProgress} 
                   className="h-1 w-full bg-zinc-200" />
@@ -127,11 +130,7 @@ const UploadDropzone = ({isSubscribed,}: {isSubscribed: boolean}) => {
               ) : null}
 
               <input
-              //onClick={() => getInputProps()}
               {...getInputProps()}
-              id="dropzone-file"
-              className="hidden"
-              type="file"
               accept="application/pdf"
               aria-label="input dropzone"
               />
