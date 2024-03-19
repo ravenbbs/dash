@@ -2,7 +2,7 @@
 import { trpc } from "@/app/_trpc/client";
 import ChatInput from "./ChatInput";
 import Messages from "./Messages";
-import { ChevronLeft, Loader2, XCircle } from "lucide-react";
+import { ChevronLeft, Crown, Loader2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "../ui/button";
 import { ChatContextProvider } from "./ChatContext";
@@ -63,7 +63,8 @@ const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
               Tu plan <span className="font-medium">gratuito</span> tiene un
               limite de 5 paginas por PDF
             </p>
-            <Link
+            <div className="gap-6 flex">
+              <Link
               href={"/dashboard"}
               className={buttonVariants({
                 variant: "secondary",
@@ -73,6 +74,17 @@ const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
               <ChevronLeft className="h-4 w-4 mr-1.5" />
               Regresar
             </Link>
+            <Link
+              href={"/pricing"}
+              className={buttonVariants({
+                variant: "secondary",
+                className: "mt-4",
+              })}
+            >
+              <Crown className="h-4 w-4 mr-1.5 text-blue-700" />
+              Actualizar a Premium
+            </Link>
+            </div>
           </div>
         </div>
         <ChatInput isDisabled />
