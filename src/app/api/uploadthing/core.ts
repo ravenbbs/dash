@@ -9,7 +9,6 @@ import { pinecone } from "@/lib/pinecone";
 import OpenAI from "openai";
 import { getUserSubscriptionPlan } from "@/lib/stripe";
 import { PLANS } from "@/config/stripe";
-import { useToast } from "@/components/ui/use-toast";
 const f = createUploadthing();
 
 const middleware = async () => {
@@ -58,18 +57,20 @@ const onUploadComplete = async ({
     const loader = new PDFLoader(blob);
     const pageLevelDocs = await loader.load();
     const pagesAnt = pageLevelDocs.length;
-
     const { subscriptionPlan } = metadata;
     const { isSubscribed } = subscriptionPlan;
 
-    const isPremiumExceeded =
-      pagesAnt > PLANS.find((plan) => plan.name === "Premium")!.pagesPerPdf;
-    const isFreeExceeded =
-      pagesAnt > PLANS.find((plan) => plan.name === "Gratuito")!.pagesPerPdf;
+    const premiumExceeded = PLANS.find(
+      (plan) => plan.name === "Premium"
+    )!.pagesPerPdf;
+    const freeExceeded = PLANS.find(
+      (plan) => plan.name === "Gratuito"
+    )!.pagesPerPdf;
 
+    // Check for page limit based on subscription plan
     if (
-      (isSubscribed && isPremiumExceeded) ||
-      (!isSubscribed && isFreeExceeded)
+      (isSubscribed && pagesAnt > premiumExceeded) ||
+      (!isSubscribed && pagesAnt > freeExceeded)
     ) {
       await db.file.update({
         data: {
@@ -79,6 +80,10 @@ const onUploadComplete = async ({
           id: createdFile.id,
         },
       });
+      // Throw a clear error message with context
+      throw new Error(
+        "El PDF supera la cantidad de páginas permitidas para el plan."
+      );
     }
 
     // Vectorize and index entire doc
@@ -120,7 +125,6 @@ const onUploadComplete = async ({
         id: createdFile.id,
       },
     });
-
   }
 };
 

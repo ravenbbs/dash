@@ -49,7 +49,11 @@ const BillingForm = ({ subscriptionPlan }: BillingFormProps) => {
             <CardTitle>Plan de suscripción</CardTitle>
             <CardDescription>
               Actualmente tienes el plan{" "}
-              <strong>{subscriptionPlan?.name}</strong>
+              <strong>
+                {subscriptionPlan.name === 'Premium' ?
+                'Premium' :
+                'Gratuito'
+                }</strong>
             </CardDescription>
           </CardHeader>
           <CardFooter className="flex flex-col items-start space-y-2 md:flex-row md:justify-between md:space-x-0">
