@@ -9,6 +9,7 @@ import { pinecone } from "@/lib/pinecone";
 import OpenAI from "openai";
 import { getUserSubscriptionPlan } from "@/lib/stripe";
 import { PLANS } from "@/config/stripe";
+import { useToast } from "@/components/ui/use-toast";
 const f = createUploadthing();
 
 const middleware = async () => {
@@ -119,6 +120,7 @@ const onUploadComplete = async ({
         id: createdFile.id,
       },
     });
+
   }
 };
 

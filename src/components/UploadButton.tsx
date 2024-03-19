@@ -4,29 +4,32 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { Button } from "./ui/button";
 import Dropzone from "react-dropzone";
-import { Cloud, File, Loader2 } from "lucide-react";
+import { Cloud, File, Loader2, X } from "lucide-react";
 import { Progress } from "./ui/progress";
 import { useUploadThing } from "@/lib/uploadthing";
 import { useToast } from "./ui/use-toast";
 import { trpc } from "@/app/_trpc/client";
 import { useRouter } from "next/navigation";
 
-const UploadDropzone = ({isSubscribed,}: {isSubscribed: boolean}) => {
-  const router = useRouter()
+const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
+  const router = useRouter();
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
-  const [bgColor, setBgColor] = useState<string>('')
-  const {toast} = useToast()
+  const [isUpload, setIsUpload] = useState<boolean>(false);
+  const [bgColor, setBgColor] = useState<string>("");
+  const { toast } = useToast();
 
-  const { startUpload } = useUploadThing(isSubscribed ? 'premiumPlanUploader' : "freePlanUploader")
+  const { startUpload } = useUploadThing(
+    isSubscribed ? "premiumPlanUploader" : "freePlanUploader"
+  );
 
   const { mutate: startPolling } = trpc.getFile.useMutation({
     onSuccess: (file) => {
-      router.push(`/dashboard/${file.id}`)
+      router.push(`/dashboard/${file.id}`);
     },
     retry: true,
-    retryDelay: 500
-  })
+    retryDelay: 500,
+  });
 
   const startSimulatedProgress = () => {
     setUploadProgress(0);
@@ -39,48 +42,52 @@ const UploadDropzone = ({isSubscribed,}: {isSubscribed: boolean}) => {
         return prevProgress + 5;
       });
     }, 500);
-    return interval
+    return interval;
   };
 
   return (
-    <Dropzone 
+    <Dropzone
       preventDropOnDocument
       multiple={false}
       onDrop={async (acceptedFile) => {
         setIsUploading(true);
 
-        const progressInterval = startSimulatedProgress()
+        const progressInterval = startSimulatedProgress();
 
-        const res = await startUpload(acceptedFile)
+        const res = await startUpload(acceptedFile);
 
-        if(!res) {
+        if (!res) {
+          setBgColor("bg-red-500");
+          clearInterval(progressInterval);
+          setUploadProgress(100);
           return toast({
             title: "Ocurrió un error",
             description: "Por favor intenta de nuevo",
-            variant: "destructive"
-          })
+            variant: "destructive",
+          });
         }
 
-        const [fileResponse] = res
+        const [fileResponse] = res;
 
-        const key = fileResponse?.key
+        const key = fileResponse?.key;
 
-        if(!key) {
+        if (!key) {
+          setBgColor("bg-red-500");
+          clearInterval(progressInterval);
+          setUploadProgress(100);
           return toast({
             title: "Ocurrió un error",
             description: "Por favor intenta de nuevo",
-            variant: "destructive"
-          })
+            variant: "destructive",
+          });
         }
 
-
-        setBgColor(res ? 'bg-green-500':'bg-red-500') 
-        clearInterval(progressInterval)
-        setUploadProgress(100)
-
-        startPolling({key})
+        setBgColor(res ? "bg-green-500" : "bg-red-500");
+        clearInterval(progressInterval);
+        setUploadProgress(100);
+        setIsUpload(true);
+        startPolling({ key });
       }}
-      
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => (
         <div
@@ -100,7 +107,9 @@ const UploadDropzone = ({isSubscribed,}: {isSubscribed: boolean}) => {
                   </span>{" "}
                   o arrastra y suelta
                 </p>
-                <p className="text-xs text-zinc-500">PDF hasta ({isSubscribed? "16" : "4"}MB)</p>
+                <p className="text-xs text-zinc-500">
+                  PDF hasta ({isSubscribed ? "16" : "4"}MB)
+                </p>
               </div>
               {acceptedFiles && acceptedFiles[0] ? (
                 <div className="max-w-xs bg-white flex items-center rounded-md overflow-hidden outline outline-[1px] outline-zinc-200 divide-x divide-zinc-200">
@@ -114,25 +123,31 @@ const UploadDropzone = ({isSubscribed,}: {isSubscribed: boolean}) => {
               ) : null}
               {isUploading ? (
                 <div className="w-full mt-4 max-w-xs mx-auto">
-                  <Progress 
-                  indicatorColor={
-                    uploadProgress === 100 ? bgColor : ''
-                  }
-                  value={uploadProgress} 
-                  className="h-1 w-full bg-zinc-200" />
+                  <Progress
+                    indicatorColor={uploadProgress === 100 ? bgColor : ""}
+                    value={uploadProgress}
+                    className="h-1 w-full bg-zinc-200"
+                  />
                   {uploadProgress === 100 ? (
-                    <div className="flex gap-1 items-center justify-center text-sm text-zinc-700 text-center pt-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      Cargando...
-                    </div>
+                    isUpload ? (
+                      <div className="flex gap-1 items-center justify-center text-sm text-zinc-700 text-center pt-2">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Cargando...
+                      </div>
+                    ) : (
+                      <div className="flex gap-1 items-center justify-center text-sm text-zinc-700 text-center pt-2">
+                        <X className="h-4 w-4" />
+                        Ocurrió un error...
+                      </div>
+                    )
                   ) : null}
                 </div>
               ) : null}
 
               <input
-              {...getInputProps()}
-              accept="application/pdf"
-              aria-label="input dropzone"
+                {...getInputProps()}
+                accept="application/pdf"
+                aria-label="input dropzone"
               />
             </label>
           </div>
@@ -142,7 +157,7 @@ const UploadDropzone = ({isSubscribed,}: {isSubscribed: boolean}) => {
   );
 };
 
-const UploadButton = ({isSubscribed} : {isSubscribed: boolean}) => {
+const UploadButton = ({ isSubscribed }: { isSubscribed: boolean }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
