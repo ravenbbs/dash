@@ -16,7 +16,7 @@ export function absoluteUrl(path: string) {
 }
 
 export function constructMetadata({
-  title = "dash",
+  title = ".dash",
   description = "Dash es una aplicación que permite chatear con tus PDFs fácilmente.",
   image = "/thumbnail.png",
   icons = "/favicon.ico",
