@@ -147,10 +147,10 @@ export default function Home() {
               <Image
                 src={"/file-upload-preview.jpg"}
                 alt="Previsualización de el producto"
-                width={1364}
-                height={866}
+                width={1464}
+                height={966}
                 quality={100}
-                className="rounded-md bg-white p-2 sm:p-8 md:p-20 shadow-2xl ring-1 ring-gray-900/10"
+                className="rounded-xl overflow-hidden bg-white   shadow-2xl ring-1 ring-gray-900/10"
               ></Image>
             </div>
           </div>
