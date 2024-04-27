@@ -69,7 +69,7 @@ const onUploadComplete = async ({
 
     // Check for page limit based on subscription plan
     if (
-      (isSubscribed && pagesAnt > premiumExceeded) ||
+      // (isSubscribed && pagesAnt > premiumExceeded) ||
       (!isSubscribed && pagesAnt > freeExceeded)
     ) {
       await db.file.update({
