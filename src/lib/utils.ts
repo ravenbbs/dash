@@ -48,7 +48,7 @@ export function constructMetadata({
       images: [image],
       creator: "@ravenbbs"
     },
-    metadataBase: new URL('https://dash-sass.vercel.app/'),
+    metadataBase: new URL('https://dash-sass.vercel.app'),
     themeColor: '#FFF',
     ...(noIndex && {
       robots: {
