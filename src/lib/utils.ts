@@ -16,12 +16,14 @@ export function absoluteUrl(path: string) {
 }
 
 export function constructMetadata({
-  title = ".dash",
+  other= {cryptomus: "e24f33f1"},
+  title = "dash",
   description = "Dash es una aplicación que permite chatear con tus PDFs fácilmente.",
   image = "/thumbnail.png",
   icons = "/favicon.ico",
   noIndex = false
 }: {
+  other?: { [name: string]: string | number | (string | number)[]; } ,
   title?: string
   description?: string
   image?: string
@@ -29,6 +31,7 @@ export function constructMetadata({
   noIndex?: boolean
 } = {}): Metadata {
   return {
+    other,
     title,
     description,
     icons,
